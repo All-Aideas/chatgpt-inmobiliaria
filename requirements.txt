@@ -1,0 +1,7 @@
+gradio
+plotly
+scikit-learn
+PyPDF2
+openai
+langchain
+llama-index==0.5.25
