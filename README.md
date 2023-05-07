@@ -7,7 +7,7 @@ Crear una carpeta con el nombre `/datos`. Esta carpeta almacenará los archivos 
 
 ## 2) Configurar API KEY
 
-La variable de entorno `OPENAI_API_KEY` deberá almacenar el API KEY de OpenAI para utilizar ChatGPT. Considerar el siguiente link [clik](https://platform.openai.com/account/api-keys) para su creación.
+La variable de entorno `OPENAI_API_KEY` deberá almacenar el API KEY de OpenAI para utilizar ChatGPT. Considerar el siguiente link [clik](https://platform.openai.com/account/api-keys) para su creación. Solicitar permiso de api key a  César Riat
 
 ```
 os.environ["OPENAI_API_KEY"] = "valor_del_api_key"
