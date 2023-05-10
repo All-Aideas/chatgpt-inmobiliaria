@@ -3,6 +3,9 @@ import gradio as gr
 from pathlib import Path
 import os
 import pandas as pd
+import time
+import random
+
 import openai
 from llama_index import GPTSimpleVectorIndex, SimpleDirectoryReader, LLMPredictor, ServiceContext
 from langchain.chat_models import ChatOpenAI
@@ -21,6 +24,13 @@ from openai.embeddings_utils import cosine_similarity
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
+# CONSTANTES
+DATASET_JSON = "demo-inmobiliaria.json"
+
+# Ubicación dataset
+carpeta_actual = os.getcwd()
+print(f"Nombre de la carpeta actual: {carpeta_actual}")
+PATH_FILE = f"{os.getcwd()}/{DATASET_JSON}"
 
 class ChatBotInmobiliaria():
     def __init__(self):
@@ -54,32 +64,10 @@ class ChatBotInmobiliaria():
         if len(question) == 0:
             print("Debe de ingresar una pregunta.")
         try:
-            return self.index.query(question)
+            return self.index.query(question + "\nResponde en español")
         except Exception as e:
             print(e)
             return "Hubo un error."
-
-def ask(dataset, pregunta):
-    if dataset is None:
-        return ""
-    path_file = dataset.name
-    print(f"Nombre del archivo: {path_file}")
-    extension = os.path.splitext(path_file)[1]
-    print(f"Extensión el archivo: {extension}")
-    dir_name = str(Path(path_file).parent)
-    print(f"Carpeta donde está ubicado el archivo: {dir_name}")
-    
-    if extension.lower() == ".pdf":
-        chatbot = ChatBotInmobiliaria()
-        DATASET_JSON = "dataset_file.json"
-        chatbot.create_dataset(dir_name, DATASET_JSON)
-        chatbot.load_dataset(DATASET_JSON)
-        return chatbot.ask(question=pregunta)
-    elif extension.lower() == ".json":
-        chatbot = ChatBotInmobiliaria()
-        chatbot.load_dataset(path_file)
-        return chatbot.ask(question=pregunta)
-    
     
 
 # Gradio
@@ -94,16 +82,24 @@ Demo Inmobiliaria, el objetivo es responder preguntas a través de OpenAI previa
 """
 
 article = "<p style='text-align: center'><a href='http://allaideas.com/index.html' target='_blank'>Demo Inmobiliaria: Link para más info</a> </p>"
+examples = [["¿Cuánto está una casa en San Isidro?"],["Hay precios más baratos?"],["A dónde llamo?", "Qué leyes existen?"]]
 
-in1 = gr.inputs.File(label="Archivo PDF")
-in2 = gr.inputs.Textbox(label="Pregunta")
-out1 = gr.outputs.Textbox(label="Respuesta")
+gpt_bot = ChatBotInmobiliaria()
+gpt_bot.load_dataset(PATH_FILE)
+chat_history = []
 
-examples = [["demo-inmobiliaria.json", "¿Qué regulaciones tengo para comprar una vivienda?"]]
+def chat(pregunta):
+    bot_message = str(gpt_bot.ask(question=pregunta))
+    chat_history.append((pregunta, bot_message))
+    time.sleep(1)
+    return chat_history
+
+in1 = gr.inputs.Textbox(label="Pregunta")
+out1 = gr.outputs.Chatbot(label="Respuesta").style(height=350)
 
 demo = gr.Interface(
-    fn=ask,
-    inputs=[in1, in2],
+    fn=chat,
+    inputs=in1,
     outputs=out1,
     title="Demo Inmobiliaria",
     description=description,
