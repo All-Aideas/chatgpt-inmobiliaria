@@ -82,7 +82,7 @@ Demo Inmobiliaria, el objetivo es responder preguntas a través de OpenAI previa
 """
 
 article = "<p style='text-align: center'><a href='http://allaideas.com/index.html' target='_blank'>Demo Inmobiliaria: Link para más info</a> </p>"
-examples = [["¿Cuánto está una casa en San Isidro?"],["Hay precios más baratos?"],["A dónde llamo?", "Qué leyes existen?"]]
+examples = [["¿Cuánto está una casa en San Isidro?"],["Hay precios más baratos?"],["A dónde llamo?"],["Qué leyes existen?"]]
 
 gpt_bot = ChatBotInmobiliaria()
 gpt_bot.load_dataset(PATH_FILE)
