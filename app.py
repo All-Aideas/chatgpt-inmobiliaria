@@ -206,50 +206,16 @@ with gr.Blocks() as demo:
         return message, chat_history
 
 
-#     def downvote_last_response(message, chat_history):
-#         """
-#         Obtener el último objeto JSON de la lista
-#         Actualizar el valor del atributo "calificacion"
-#         """
-#         if len(json_chat_history) > 0:
-#             json_chat_history[-1]["calificacion"] = "No conforme"
-#             update_chat(id_chat, json_chat_history)
+     def downvote_last_response(message, chat_history):
+         """
+         Obtener el último objeto JSON de la lista
+         Actualizar el valor del atributo "calificacion"
+         """
+         if len(json_chat_history) > 0:
+             json_chat_history[-1]["calificacion"] = "No conforme"
+             update_chat(id_chat, json_chat_history)
         
-#         return message, chat_history
-
-    def downvote_last_response(message, chat_history):
-        """
-        Obtener el último objeto JSON de la lista
-        Actualizar el valor del atributo "calificacion"
-        """
-        if len(json_chat_history) > 0:
-            json_chat_history[-1]["calificacion"] = "No conforme"
-            # Display additional buttons for tagging the downvote
-            gr.Interface(fn=tag_downvote_reason, inputs=[], outputs="text").launch()
-
-            update_chat(id_chat, json_chat_history)
-
-        return message, chat_history
-
-
-    def tag_downvote_reason():
-        """
-        Function to handle the tagging of downvote reasons
-        """
-        # Display buttons for selecting downvote reasons
-        downvote_reason = gr.inputs.Radio(
-            ["Offtopic", "Unclear", "Offensive", "Incorrect information", "Other"],
-            label="Select downvote reason:"
-        )
-        # You can add more input options or customize the appearance of buttons if needed
-
-        # Get the selected reason
-        reason = gr.Interface(inputs=[downvote_reason], outputs="text").launch()
-
-        # Update the JSON chat history with the downvote reason
-        if len(json_chat_history) > 0:
-            json_chat_history[-1]["downvote_reason"] = reason
-            update_chat(id_chat, json_chat_history)
+         return message, chat_history
 
 
     def flag_last_response(message, chat_history):
